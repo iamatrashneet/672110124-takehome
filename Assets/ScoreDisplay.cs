@@ -12,7 +12,15 @@ namespace Laliphat
             var tmp = GetComponent<TextMeshProUGUI>();
             if (tmp != null)
             {
-                tmp.text = $"{prefix}{GameSession.FinalScore}";
+                if (tmp.text.Contains("score :") || tmp.text.Contains("Score :") || tmp.text.Contains("99999"))
+                {
+                    string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+                    tmp.text = $"{sceneName}\n\n\nScore : {GameSession.FinalScore}";
+                }
+                else
+                {
+                    tmp.text = $"{prefix}{GameSession.FinalScore}";
+                }
             }
         }
     }
