@@ -1,18 +1,40 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// TODO: เปลี่ยน YourName เป็นชื่อภาษาอังกฤษของตัวเอง (ข้อกำหนดข้อ 7)
-namespace YourName
+namespace Laliphat
 {
     // เก็บข้อมูลที่ต้องส่งข้ามฉาก (static จึงไม่หายตอนเปลี่ยนฉาก)
     public static class GameSession
     {
-        public static string LastStage = "Stage1";
+        public static string LastStage = "Stage 1";
         public static int FinalScore = 0;
     }
 
     public class SceneLoader : MonoBehaviour
     {
+        private void Start()
+        {
+            var activeSceneName = SceneManager.GetActiveScene().name;
+            if (activeSceneName == "Win" || activeSceneName == "GameOver")
+            {
+                var tmps = FindObjectsByType<TMPro.TextMeshProUGUI>(FindObjectsSortMode.None);
+                foreach (var tmp in tmps)
+                {
+                    if (tmp != null && (tmp.text.Contains("score :") || tmp.text.Contains("Score :") || tmp.text.Contains("99999")))
+                    {
+                        if (tmp.text.Contains("Game Over"))
+                        {
+                            tmp.text = $"Game Over\n\n\nScore : {GameSession.FinalScore}";
+                        }
+                        else if (tmp.text.Contains("Win"))
+                        {
+                            tmp.text = $"Win\n\n\nScore : {GameSession.FinalScore}";
+                        }
+                    }
+                }
+            }
+        }
+
         // ปุ่มทั่วไป: ไปฉากตามชื่อ (เช่น MainMenu, StageSelection, Credits)
         public void Load(string sceneName)
         {
@@ -54,6 +76,28 @@ namespace YourName
         {
             GameSession.FinalScore = score;
             SceneManager.LoadScene("GameOver");
+        }
+
+        public void GoToWin()
+        {
+            SceneManager.LoadScene("Win");
+        }
+
+        public void GoToGameOver()
+        {
+            SceneManager.LoadScene("GameOver");
+        }
+
+        public void CloseOptions()
+        {
+            if (SceneManager.sceneCount > 1)
+            {
+                SceneManager.UnloadSceneAsync("Options");
+            }
+            else
+            {
+                SceneManager.LoadScene("MainMenu");
+            }
         }
 
         public void QuitGame()
