@@ -114,21 +114,31 @@ namespace Laliphat
 
         private void TriggerWin()
         {
+            if (isGameOver) return;
             isGameOver = true;
             GameSession.FinalScore = currentScore;
             if (sceneLoader != null)
             {
                 sceneLoader.GoToWin(currentScore);
             }
+            else
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Win");
+            }
         }
 
         private void TriggerGameOver()
         {
+            if (isGameOver) return;
             isGameOver = true;
             GameSession.FinalScore = currentScore;
             if (sceneLoader != null)
             {
                 sceneLoader.GoToGameOver(currentScore);
+            }
+            else
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("GameOver");
             }
         }
     }
