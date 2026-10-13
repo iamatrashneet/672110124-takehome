@@ -35,7 +35,14 @@ namespace Laliphat
 
             if (currentTarget != null)
             {
-                if (Input.GetKeyDown(interactKey))
+                bool pressed = Input.GetKeyDown(interactKey);
+#if ENABLE_INPUT_SYSTEM
+                if (!pressed && UnityEngine.InputSystem.Keyboard.current != null)
+                {
+                    pressed = UnityEngine.InputSystem.Keyboard.current.eKey.wasPressedThisFrame;
+                }
+#endif
+                if (pressed)
                 {
                     InteractWithTarget();
                 }
