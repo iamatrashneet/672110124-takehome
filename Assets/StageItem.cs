@@ -22,10 +22,18 @@ namespace Laliphat
         [SerializeField] private float bobSpeed = 3f;
         [SerializeField] private float bobHeight = 0.25f;
 
+        [Header("Interaction Settings")]
+        [SerializeField] private bool requireInteraction = false;
+
         private Vector3 startPosition;
         private bool isCollected = false;
 
         public ItemType Type => itemType;
+        public bool RequireInteraction
+        {
+            get => requireInteraction;
+            set => requireInteraction = value;
+        }
 
         private void Start()
         {
@@ -45,6 +53,7 @@ namespace Laliphat
         private void OnTriggerEnter(Collider other)
         {
             if (isCollected) return;
+            if (requireInteraction) return; // In Stage 2, collection requires explicit interaction!
 
             if (other.CompareTag("Player") || other.GetComponent<PlayerController>() != null)
             {
